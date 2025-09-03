@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Naturalization Test Flashcards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            padding: 25px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .progress-section {
+            padding: 20px 25px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            transition: width 0.3s ease;
+            border-radius: 6px;
+        }
+
+        .progress-text {
+            font-weight: 600;
+            color: #495057;
+            text-align: center;
+        }
+
+        .card-container {
+            padding: 40px;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flashcard {
+            width: 100%;
+            max-width: 600px;
+            min-height: 300px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .flashcard:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-content {
+            padding: 30px;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .category-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.4rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .answer {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            color: #27ae60;
+            font-weight: 500;
+        }
+
+        .answer ul {
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+            list-style: none;
+        }
+
+        .answer li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .answer li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .flip-indicator {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            background: rgba(0,0,0,0.1);
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .navigation {
+            padding: 25px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-btn.prev {
+            background: #6c757d;
+            color: white;
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .question-counter {
+            font-weight: 600;
+            color: #495057;
+            font-size: 1.1rem;
+        }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .welcome-screen h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .welcome-screen p {
+            color: #6c757d;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .card-container {
+                padding: 20px;
+            }
+            
+            .question {
+                font-size: 1.2rem;
+            }
+            
+            .answer {
+                font-size: 1.1rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇺🇸 US Naturalization Test</h1>
+            <p>Interactive Flashcards for Citizenship Study</p>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="startStudy()">Start Study</button>
+            <button class="btn btn-secondary" onclick="shuffleQuestions()">Shuffle Questions</button>
+            <button class="btn btn-secondary" onclick="resetOrder()">Reset Order</button>
+            <button class="btn btn-success" onclick="showProgress()">View Progress</button>
+        </div>
+
+        <div class="progress-section" id="progressSection" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text" id="progressText">Question 0 of 100</div>
+        </div>
+
+        <div class="card-container">
+            <div id="welcomeScreen" class="welcome-screen">
+                <h2>Welcome to Your Naturalization Study App!</h2>
+                <p>Practice with all 100 official questions from the US Naturalization Test. Click on any flashcard to reveal the answer, and use the navigation buttons to move between questions.</p>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number">100</span>
+                        <span class="stat-label">Questions</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">Categories</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="completedCount">0</span>
+                        <span class="stat-label">Completed</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="accuracyRate">0%</span>
+                        <span class="stat-label">Progress</span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="startStudy()" style="font-size: 1.2rem; padding: 15px 30px;">Begin Studying</button>
+            </div>
+
+            <div id="flashcard" class="flashcard" onclick="flipCard()" style="display: none;">
+                <div class="card-content">
+                    <div class="category-badge" id="categoryBadge">American Government</div>
+                    <div class="question" id="questionText">Click "Start Study" to begin</div>
+                    <div class="answer" id="answerText" style="display: none;"></div>
+                    <div class="flip-indicator">Tap to reveal answer</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation" id="navigation" style="display: none;">
+            <button class="nav-btn prev" onclick="previousCard()" id="prevBtn">← Previous</button>
+            <span class="question-counter" id="questionCounter">1 of 100</span>
+            <button class="nav-btn next" onclick="nextCard()" id="nextBtn">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        // All 100 questions from the official Naturalization Test document - EXACT COPY
+        const flashcards = [
+            // AMERICAN GOVERNMENT - A: Principles of American Democracy
+            { category: "American Government", subcategory: "A: Principles of American Democracy", question: "What is the supreme law of the land?", answer: "• the Constitution" },
+            { category: "American Government", subcategory: "A: Principles of American Democracy", question: "What does the Constitution do?", answer: "• sets up the government\n• defines the government\n• protects basic rights of Americans" },
+            { category: "American Government", subcategory: "A: Principles of American Democracy", question: "The idea of self-government is in the first three words of the Constitution. What are these words?", answer: "• We the People" },
+            { category: "American Government", subcategory: "A: Principles of American Democracy", question: "What is an amendment?", answer: "• a change (to the Constitution)\n• an addition (to the Constitution)" },
+            { category: "American Government", subcategory: "A: Principles of American Democracy", question: "What do we call the first ten amendments to the Constitution?", answer: "• the Bill of Rights" },
+            { category: "American Government", subcategory: "A: Principles of American Democracy", question: "What is one right or freedom from the First Amendment?", answer: "• speech\n• religion\n• assembly\n• press\n• petition the government" },
+            { category: "American Government", subcategory: "A: Principles of American Democracy", question: "How many amendments does the Constitution have?", answer: "• twenty-seven (27)" },
+            { category: "American Government", subcategory: "A: Principles of American Democracy", question: "What did the Declaration of Independence do?", answer: "• announced our independence (from Great Britain)\n• declared our independence (from Great Britain)\n• said that the United States is free (from Great Britain)" },
+            { category: "American Government", subcategory: "A: Principles of American Democracy", question: "What are two rights in the Declaration of Independence?", answer: "• life\n• liberty\n• pursuit of happiness" },
+            { category: "American Government", subcategory: "A: Principles of American Democracy", question: "What is freedom of religion?", answer: "• You can practice any religion, or not practice a religion." },
+            { category: "American Government", subcategory: "A: Principles of American Democracy", question: "What is the economic system in the United States?", answer: "• capitalist economy\n• market economy" },
+            { category: "American Government", subcategory: "A: Principles of American Democracy", question: "What is the \"rule of law\"?", answer: "• Everyone must follow the law.\n• Leaders must obey the law.\n• Government must obey the law.\n• No one is above the law." },
+
+            // AMERICAN GOVERNMENT - B: System of Government
+            { category: "American Government", subcategory: "B: System of Government", question: "Name one branch or part of the government.", answer: "• Congress\n• legislative\n• President\n• executive\n• the courts\n• judicial" },
+            { category: "American Government", subcategory: "B: System of Government", question: "What stops one branch of government from becoming too powerful?", answer: "• checks and balances\n• separation of powers" },
+            { category: "American Government", subcategory: "B: System of Government", question: "Who is in charge of the executive branch?", answer: "• the President" },
+            { category: "American Government", subcategory: "B: System of Government", question: "Who makes federal laws?", answer: "• Congress\n• Senate and House (of Representatives)\n• (U.S. or national) legislature" },
+            { category: "American Government", subcategory: "B: System of Government", question: "What are the two parts of the U.S. Congress?", answer: "• the Senate and House (of Representatives)" },
+            { category: "American Government", subcategory: "B: System of Government", question: "How many U.S. Senators are there?", answer: "• one hundred (100)" },
+            { category: "American Government", subcategory: "B: System of Government", question: "We elect a U.S. Senator for how many years?", answer: "• six (6)" },
+            { category: "American Government", subcategory: "B: System of Government", question: "Who is one of your state's U.S. Senators now?", answer: "• Ted Cruz\n• John Cornyn" },
+            { category: "American Government", subcategory: "B: System of Government", question: "The House of Representatives has how many voting members?", answer: "• four hundred thirty-five (435)" },
+            { category: "American Government", subcategory: "B: System of Government", question: "We elect a U.S. Representative for how many years?", answer: "• two (2)" },
+            { category: "American Government", subcategory: "B: System of Government", question: "Name your U.S. Representative.", answer: "• Brandon Gill" },
+            { category: "American Government", subcategory: "B: System of Government", question: "Who does a U.S. Senator represent?", answer: "• all people of the state" },
+            { category: "American Government", subcategory: "B: System of Government", question: "Why do some states have more Representatives than other states?", answer: "• (because of) the state's population\n• (because) they have more people\n• (because) some states have more people" },
+            { category: "American Government", subcategory: "B: System of Government", question: "We elect a President for how many years?", answer: "• four (4)" },
+            { category: "American Government", subcategory: "B: System of Government", question: "In what month do we vote for President?", answer: "• November" },
+            { category: "American Government", subcategory: "B: System of Government", question: "What is the name of the President of the United States now?", answer: "• Donald Trump" },
+            { category: "American Government", subcategory: "B: System of Government", question: "What is the name of the Vice President of the United States now?", answer: "• JD Vance" },
+            { category: "American Government", subcategory: "B: System of Government", question: "If the President can no longer serve, who becomes President?", answer: "• the Vice President" },
+            { category: "American Government", subcategory: "B: System of Government", question: "If both the President and the Vice President can no longer serve, who becomes President?", answer: "• the Speaker of the House" },
+            { category: "American Government", subcategory: "B: System of Government", question: "Who is the Commander in Chief of the military?", answer: "• the President" },
+            { category: "American Government", subcategory: "B: System of Government", question: "Who signs bills to become laws?", answer: "• the President" },
+            { category: "American Government", subcategory: "B: System of Government", question: "Who vetoes bills?", answer: "• the President" },
+            { category: "American Government", subcategory: "B: System of Government", question: "What does the President's Cabinet do?", answer: "• advises the President" },
+            { category: "American Government", subcategory: "B: System of Government", question: "What are two Cabinet-level positions?", answer: "• Secretary of Agriculture\n• Secretary of Commerce\n• Secretary of Defense\n• Secretary of Education\n• Secretary of Energy\n• Secretary of Health and Human Services\n• Secretary of Homeland Security\n• Secretary of Housing and Urban Development\n• Secretary of the Interior\n• Secretary of Labor\n• Secretary of State\n• Secretary of Transportation\n• Secretary of the Treasury\n• Secretary of Veterans Affairs\n• Attorney General\n• Vice President" },
+            { category: "American Government", subcategory: "B: System of Government", question: "What does the judicial branch do?", answer: "• reviews laws\n• explains laws\n• resolves disputes (disagreements)\n• decides if a law goes against the Constitution" },
+            { category: "American Government", subcategory: "B: System of Government", question: "What is the highest court in the United States?", answer: "• the Supreme Court" },
+            { category: "American Government", subcategory: "B: System of Government", question: "How many justices are on the Supreme Court?", answer: "• 9" },
+            { category: "American Government", subcategory: "B: System of Government", question: "Who is the Chief Justice of the United States now?", answer: "• John G. Roberts, Jr." },
+            { category: "American Government", subcategory: "B: System of Government", question: "Under our Constitution, some powers belong to the federal government. What is one power of the federal government?", answer: "• to print money\n• to declare war\n• to create an army\n• to make treaties" },
+            { category: "American Government", subcategory: "B: System of Government", question: "Under our Constitution, some powers belong to the states. What is one power of the states?", answer: "• provide schooling and education\n• provide protection (police)\n• provide safety (fire departments)\n• give a driver's license\n• approve zoning and land use" },
+            { category: "American Government", subcategory: "B: System of Government", question: "Who is the Governor of your state now?", answer: "• Greg Abbott" },
+            { category: "American Government", subcategory: "B: System of Government", question: "What is the capital of your state?", answer: "• Austin" },
+            { category: "American Government", subcategory: "B: System of Government", question: "What are the two major political parties in the United States?", answer: "• Democratic and Republican" },
+            { category: "American Government", subcategory: "B: System of Government", question: "What is the political party of the President now?", answer: "• Republican" },
+            { category: "American Government", subcategory: "B: System of Government", question: "What is the name of the Speaker of the House of Representatives now?", answer: "• Mike Johnson" },
+
+            // AMERICAN GOVERNMENT - C: Rights and Responsibilities
+            { category: "American Government", subcategory: "C: Rights and Responsibilities", question: "There are four amendments to the Constitution about who can vote. Describe one of them.", answer: "• Citizens eighteen (18) and older (can vote).\n• You don't have to pay (a poll tax) to vote.\n• Any citizen can vote. (Women and men can vote.)\n• A male citizen of any race (can vote)." },
+            { category: "American Government", subcategory: "C: Rights and Responsibilities", question: "What is one responsibility that is only for United States citizens?", answer: "• serve on a jury\n• vote in a federal election" },
+            { category: "American Government", subcategory: "C: Rights and Responsibilities", question: "Name one right only for United States citizens.", answer: "• vote in a federal election\n• run for federal office" },
+            { category: "American Government", subcategory: "C: Rights and Responsibilities", question: "What are two rights of everyone living in the United States?", answer: "• freedom of expression\n• freedom of speech\n• freedom of assembly\n• freedom to petition the government\n• freedom of religion\n• the right to bear arms" },
+            { category: "American Government", subcategory: "C: Rights and Responsibilities", question: "What do we show loyalty to when we say the Pledge of Allegiance?", answer: "• the United States\n• the flag" },
+            { category: "American Government", subcategory: "C: Rights and Responsibilities", question: "What is one promise you make when you become a United States citizen?", answer: "• give up loyalty to other countries\n• defend the Constitution and laws of the United States\n• obey the laws of the United States\n• serve in the U.S. military (if needed)\n• serve (do important work for) the nation (if needed)\n• be loyal to the United States" },
+            { category: "American Government", subcategory: "C: Rights and Responsibilities", question: "How old do citizens have to be to vote for President?", answer: "• eighteen (18) and older" },
+            { category: "American Government", subcategory: "C: Rights and Responsibilities", question: "What are two ways that Americans can participate in their democracy?", answer: "• vote\n• join a political party\n• help with a campaign\n• join a civic group\n• join a community group\n• give an elected official your opinion on an issue\n• call Senators and Representatives\n• publicly support or oppose an issue or policy\n• run for office\n• write to a newspaper" },
+            { category: "American Government", subcategory: "C: Rights and Responsibilities", question: "When is the last day you can send in federal income tax forms?", answer: "• April 15" },
+            { category: "American Government", subcategory: "C: Rights and Responsibilities", question: "When must all men register for the Selective Service?", answer: "• at age eighteen (18)\n• between eighteen (18) and twenty-six (26)" },
+
+            // AMERICAN HISTORY - A: Colonial Period and Independence
+            { category: "American History", subcategory: "A: Colonial Period and Independence", question: "What is one reason colonists came to America?", answer: "• freedom\n• political liberty\n• religious freedom\n• economic opportunity\n• practice their religion\n• escape persecution" },
+            { category: "American History", subcategory: "A: Colonial Period and Independence", question: "Who lived in America before the Europeans arrived?", answer: "• American Indians\n• Native Americans" },
+            { category: "American History", subcategory: "A: Colonial Period and Independence", question: "What group of people was taken to America and sold as slaves?", answer: "• Africans\n• people from Africa" },
+            { category: "American History", subcategory: "A: Colonial Period and Independence", question: "Why did the colonists fight the British?", answer: "• because of high taxes (taxation without representation)\n• because the British army stayed in their houses (boarding, quartering)\n• because they didn't have self-government" },
+            { category: "American History", subcategory: "A: Colonial Period and Independence", question: "Who wrote the Declaration of Independence?", answer: "• (Thomas) Jefferson" },
+            { category: "American History", subcategory: "A: Colonial Period and Independence", question: "When was the Declaration of Independence adopted?", answer: "• July 4, 1776" },
+            { category: "American History", subcategory: "A: Colonial Period and Independence", question: "There were 13 original states. Name three.", answer: "• New Hampshire\n• Massachusetts\n• Rhode Island\n• Connecticut\n• New York\n• New Jersey\n• Pennsylvania\n• Delaware\n• Maryland\n• Virginia\n• North Carolina\n• South Carolina\n• Georgia" },
+            { category: "American History", subcategory: "A: Colonial Period and Independence", question: "What happened at the Constitutional Convention?", answer: "• The Constitution was written.\n• The Founding Fathers wrote the Constitution." },
+            { category: "American History", subcategory: "A: Colonial Period and Independence", question: "When was the Constitution written?", answer: "• 1787" },
+            { category: "American History", subcategory: "A: Colonial Period and Independence", question: "The Federalist Papers supported the passage of the U.S. Constitution. Name one of the writers.", answer: "• (James) Madison\n• (Alexander) Hamilton\n• (John) Jay\n• Publius" },
+            { category: "American History", subcategory: "A: Colonial Period and Independence", question: "What is one thing Benjamin Franklin is famous for?", answer: "• U.S. diplomat\n• oldest member of the Constitutional Convention\n• first Postmaster General of the United States\n• writer of \"Poor Richard's Almanac\"\n• started the first free libraries" },
+            { category: "American History", subcategory: "A: Colonial Period and Independence", question: "Who is the \"Father of Our Country\"?", answer: "• (George) Washington" },
+            { category: "American History", subcategory: "A: Colonial Period and Independence", question: "Who was the first President?", answer: "• (George) Washington" },
+
+            // AMERICAN HISTORY - B: 1800s
+            { category: "American History", subcategory: "B: 1800s", question: "What territory did the United States buy from France in 1803?", answer: "• the Louisiana Territory\n• Louisiana" },
+            { category: "American History", subcategory: "B: 1800s", question: "Name one war fought by the United States in the 1800s.", answer: "• War of 1812\n• Mexican-American War\n• Civil War\n• Spanish-American War" },
+            { category: "American History", subcategory: "B: 1800s", question: "Name the U.S. war between the North and the South.", answer: "• the Civil War\n• the War between the States" },
+            { category: "American History", subcategory: "B: 1800s", question: "Name one problem that led to the Civil War.", answer: "• slavery\n• economic reasons\n• states' rights" },
+            { category: "American History", subcategory: "B: 1800s", question: "What was one important thing that Abraham Lincoln did?", answer: "• freed the slaves (Emancipation Proclamation)\n• saved (or preserved) the Union\n• led the United States during the Civil War" },
+            { category: "American History", subcategory: "B: 1800s", question: "What did the Emancipation Proclamation do?", answer: "• freed the slaves\n• freed slaves in the Confederacy\n• freed slaves in the Confederate states\n• freed slaves in most Southern states" },
+            { category: "American History", subcategory: "B: 1800s", question: "What did Susan B. Anthony do?", answer: "• fought for women's rights\n• fought for civil rights" },
+
+            // AMERICAN HISTORY - C: Recent History
+            { category: "American History", subcategory: "C: Recent American History and Other Important Historical Information", question: "Name one war fought by the United States in the 1900s.", answer: "• World War I\n• World War II\n• Korean War\n• Vietnam War\n• (Persian) Gulf War" },
+            { category: "American History", subcategory: "C: Recent American History and Other Important Historical Information", question: "Who was President during World War I?", answer: "• (Woodrow) Wilson" },
+            { category: "American History", subcategory: "C: Recent American History and Other Important Historical Information", question: "Who was President during the Great Depression and World War II?", answer: "• (Franklin) Roosevelt" },
+            { category: "American History", subcategory: "C: Recent American History and Other Important Historical Information", question: "Who did the United States fight in World War II?", answer: "• Japan, Germany, and Italy" },
+            { category: "American History", subcategory: "C: Recent American History and Other Important Historical Information", question: "Before he was President, Eisenhower was a general. What war was he in?", answer: "• World War II" },
+            { category: "American History", subcategory: "C: Recent American History and Other Important Historical Information", question: "During the Cold War, what was the main concern of the United States?", answer: "• Communism" },
+            { category: "American History", subcategory: "C: Recent American History and Other Important Historical Information", question: "What movement tried to end racial discrimination?", answer: "• civil rights (movement)" },
+            { category: "American History", subcategory: "C: Recent American History and Other Important Historical Information", question: "What did Martin Luther King, Jr. do?", answer: "• fought for civil rights\n• worked for equality for all Americans" },
+            { category: "American History", subcategory: "C: Recent American History and Other Important Historical Information", question: "What major event happened on September 11, 2001, in the United States?", answer: "• Terrorists attacked the United States." },
+            { category: "American History", subcategory: "C: Recent American History and Other Important Historical Information", question: "Name one American Indian tribe in the United States.", answer: "• Cherokee\n• Navajo\n• Sioux\n• Chippewa\n• Choctaw\n• Pueblo\n• Apache\n• Iroquois\n• Creek\n• Blackfeet\n• Seminole\n• Cheyenne\n• Arawak\n• Shawnee\n• Mohegan\n• Huron\n• Oneida\n• Lakota\n• Crow\n• Teton\n• Hopi\n• Inuit" },
+
+            // INTEGRATED CIVICS - A: Geography
+            { category: "Integrated Civics", subcategory: "A: Geography", question: "Name one of the two longest rivers in the United States.", answer: "• Missouri (River)\n• Mississippi (River)" },
+            { category: "Integrated Civics", subcategory: "A: Geography", question: "What ocean is on the West Coast of the United States?", answer: "• Pacific (Ocean)" },
+            { category: "Integrated Civics", subcategory: "A: Geography", question: "What ocean is on the East Coast of the United States?", answer: "• Atlantic (Ocean)" },
+            { category: "Integrated Civics", subcategory: "A: Geography", question: "Name one U.S. territory.", answer: "• Puerto Rico\n• U.S. Virgin Islands\n• American Samoa\n• Northern Mariana Islands\n• Guam" },
+            { category: "Integrated Civics", subcategory: "A: Geography", question: "Name one state that borders Canada.", answer: "• Maine\n• New Hampshire\n• Vermont\n• New York\n• Pennsylvania\n• Ohio\n• Michigan\n• Minnesota\n• North Dakota\n• Montana\n• Idaho\n• Washington\n• Alaska" },
+            { category: "Integrated Civics", subcategory: "A: Geography", question: "Name one state that borders Mexico.", answer: "• California\n• Arizona\n• New Mexico\n• Texas" },
+            { category: "Integrated Civics", subcategory: "A: Geography", question: "What is the capital of the United States?", answer: "• Washington, D.C." },
+            { category: "Integrated Civics", subcategory: "A: Geography", question: "Where is the Statue of Liberty?", answer: "• New York (Harbor)\n• Liberty Island" },
+
+            // INTEGRATED CIVICS - B: Symbols
+            { category: "Integrated Civics", subcategory: "B: Symbols", question: "Why does the flag have 13 stripes?", answer: "• because there were 13 original colonies\n• because the stripes represent the original colonies" },
+            { category: "Integrated Civics", subcategory: "B: Symbols", question: "Why does the flag have 50 stars?", answer: "• because there is one star for each state\n• because each star represents a state\n• because there are 50 states" },
+            { category: "Integrated Civics", subcategory: "B: Symbols", question: "What is the name of the national anthem?", answer: "• The Star-Spangled Banner" },
+
+            // INTEGRATED CIVICS - C: Holidays
+            { category: "Integrated Civics", subcategory: "C: Holidays", question: "When do we celebrate Independence Day?", answer: "• July 4" },
+            { category: "Integrated Civics", subcategory: "C: Holidays", question: "Name two national U.S. holidays.", answer: "• New Year's Day\n• Martin Luther King, Jr. Day\n• Presidents' Day\n• Memorial Day\n• Independence Day\n• Labor Day\n• Columbus Day\n• Veterans Day\n• Thanksgiving\n• Christmas" }
+        ];
+
+        let currentIndex = 0;
+        let isShowingAnswer = false;
+        let isShuffled = false;
+        let studyStarted = false;
+        let originalOrder = [...flashcards];
+        
+        // Memory-based progress tracking (since localStorage isn't available)
+        let studyProgress = {
+            completed: [],
+            currentIndex: 0,
+            totalStudied: 0,
+            shuffleState: false
+        };
+
+        function saveProgress() {
+            studyProgress = {
+                completed: [...new Set(studyProgress.completed)],
+                currentIndex: currentIndex,
+                totalStudied: studyProgress.totalStudied,
+                shuffleState: isShuffled
+            };
+        }
+
+        function loadProgress() {
+            currentIndex = studyProgress.currentIndex;
+            isShuffled = studyProgress.shuffleState;
+            updateStats();
+        }
+
+        function updateStats() {
+            const completedCount = studyProgress.completed.length;
+            const accuracyRate = Math.round((completedCount / flashcards.length) * 100);
+            
+            document.getElementById('completedCount').textContent = completedCount;
+            document.getElementById('accuracyRate').textContent = accuracyRate + '%';
+        }
+
+        function startStudy() {
+            studyStarted = true;
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('flashcard').style.display = 'block';
+            document.getElementById('navigation').style.display = 'flex';
+            document.getElementById('progressSection').style.display = 'block';
+            
+            loadProgress();
+            displayCard();
+        }
+
+        function shuffleQuestions() {
+            if (!studyStarted) {
+                alert('Please start studying first!');
+                return;
+            }
+            
+            // Fisher-Yates shuffle algorithm
+            for (let i = flashcards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+            }
+            
+            isShuffled = true;
+            currentIndex = 0;
+            isShowingAnswer = false;
+            displayCard();
+            saveProgress();
+            
+            alert('Questions have been shuffled! 🔀');
+        }
+
+        function resetOrder() {
+            if (!studyStarted) {
+                alert('Please start studying first!');
+                return;
+            }
+            
+            // Restore original order
+            flashcards.splice(0, flashcards.length, ...originalOrder);
+            
+            isShuffled = false;
+            currentIndex = 0;
+            isShowingAnswer = false;
+            displayCard();
+            saveProgress();
+            
+            alert('Questions have been reset to original order! 📚');
+        }
+
+        function displayCard() {
+            if (currentIndex >= flashcards.length) {
+                currentIndex = 0;
+            }
+            
+            const card = flashcards[currentIndex];
+            
+            document.getElementById('categoryBadge').textContent = card.category;
+            document.getElementById('questionText').textContent = card.question;
+            
+            // Format answer with bullet points
+            const formattedAnswer = card.answer.split('\n').map(line => {
+                if (line.startsWith('•')) {
+                    return '<div style="margin: 5px 0; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #27ae60; font-weight: bold;">✓</span>' + line.substring(1).trim() + '</div>';
+                } else {
+                    return '<div style="margin: 5px 0;">' + line + '</div>';
+                }
+            }).join('');
+            
+            document.getElementById('answerText').innerHTML = formattedAnswer;
+            document.getElementById('answerText').style.display = 'none';
+            
+            // Update navigation
+            document.getElementById('questionCounter').textContent = `${currentIndex + 1} of ${flashcards.length}`;
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            document.getElementById('nextBtn').disabled = currentIndex === flashcards.length - 1;
+            
+            // Update progress bar
+            const progress = ((currentIndex + 1) / flashcards.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Question ${currentIndex + 1} of ${flashcards.length}`;
+            
+            // Reset flip state
+            isShowingAnswer = false;
+            document.querySelector('.flip-indicator').textContent = 'Tap to reveal answer';
+            
+            // Mark as studied
+            if (!studyProgress.completed.includes(currentIndex)) {
+                studyProgress.completed.push(currentIndex);
+                studyProgress.totalStudied = studyProgress.completed.length;
+                saveProgress();
+                updateStats();
+            }
+        }
+
+        function flipCard() {
+            if (!studyStarted) return;
+            
+            const answerElement = document.getElementById('answerText');
+            const questionElement = document.getElementById('questionText');
+            const indicator = document.querySelector('.flip-indicator');
+            
+            if (!isShowingAnswer) {
+                questionElement.style.display = 'none';
+                answerElement.style.display = 'block';
+                indicator.textContent = 'Tap to show question';
+                isShowingAnswer = true;
+            } else {
+                questionElement.style.display = 'block';
+                answerElement.style.display = 'none';
+                indicator.textContent = 'Tap to reveal answer';
+                isShowingAnswer = false;
+            }
+        }
+
+        function nextCard() {
+            if (currentIndex < flashcards.length - 1) {
+                currentIndex++;
+                displayCard();
+                saveProgress();
+            }
+        }
+
+        function previousCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                displayCard();
+                saveProgress();
+            }
+        }
+
+        function showProgress() {
+            const completed = studyProgress.completed.length;
+            const total = flashcards.length;
+            const percentage = Math.round((completed / total) * 100);
+            
+            alert(`📊 Study Progress:\n\nQuestions studied: ${completed} of ${total}\nProgress: ${percentage}%\n\n${studyStarted ? 'Keep up the great work! 🎉' : 'Start studying to track your progress!'}`);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (!studyStarted) return;
+            
+            switch(e.key) {
+                case ' ':
+                case 'Enter':
+                    e.preventDefault();
+                    flipCard();
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    previousCard();
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    nextCard();
+                    break;
+            }
+        });
+
+        // Initialize the app
+        loadProgress();
+        updateStats();
+
+        // Auto-save progress periodically
+        setInterval(saveProgress, 5000);
+    </script>
+</body>
+</html>
